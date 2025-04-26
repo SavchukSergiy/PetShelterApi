@@ -1,11 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PetShelterApi.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using PetShelterApi.Dtos;
-using PetShelterApi.Models;
 using PetShelterApi.Services;
+using Microsoft.Extensions.Logging;
 
 namespace PetShelterApi.Controllers
 {
@@ -14,18 +10,30 @@ namespace PetShelterApi.Controllers
     public class AnimalsController : ControllerBase
     {
         private readonly IAnimalService _animalService;
+        private readonly ILogger<AnimalsController> _logger;
 
-        public AnimalsController(IAnimalService animalService)
+        public AnimalsController(IAnimalService animalService, ILogger<AnimalsController> logger)
         {
             _animalService = animalService;
+            _logger = logger;
         }
 
         // GET: api/animals
         [HttpGet]
         public async Task<IActionResult> GetAnimals()
         {
-            var animals = await _animalService.GetAllAnimalsAsync();
-            return Ok(animals);
+            try
+            {
+                _logger.LogInformation("Fetching all animals from the database.");
+                var animals = await _animalService.GetAllAnimalsAsync();
+                return Ok(animals);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "An error occurred while fetching animals.");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // GET: api/animals/5
