@@ -2,6 +2,7 @@
 using PetShelterApi.Dtos;
 using PetShelterApi.Models;
 using PetShelterApi.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace PetShelterApi.Services
 {
@@ -9,11 +10,13 @@ namespace PetShelterApi.Services
     {
         private readonly IAnimalRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ILogger<AnimalService> _logger;
 
-        public AnimalService(IAnimalRepository repository, IMapper mapper)
+        public AnimalService(IAnimalRepository repository, IMapper mapper, ILogger<AnimalService> logger)
         {
             _repository = repository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<AnimalReadDto> CreateAnimalAsync(AnimalCreateDto createDto)
@@ -37,8 +40,17 @@ namespace PetShelterApi.Services
 
         public async Task<IEnumerable<AnimalReadDto>> GetAllAnimalsAsync()
         {
-            var animals = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<AnimalReadDto>>(animals);
+            try
+            {
+                _logger.LogInformation("Fetching all animals from repository.");
+                var animals = await _repository.GetAllAsync();
+                return _mapper.Map<IEnumerable<AnimalReadDto>>(animals);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching animals from the repository.");
+                throw;
+            }
         }
 
         public async Task<AnimalReadDto?> GetAnimalByIdAsync(int id)
