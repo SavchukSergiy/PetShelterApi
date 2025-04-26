@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PetShelterApi.Data;
 using PetShelterApi.Repositories;
 using PetShelterApi.Services;
+using PetShelterApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +34,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
-    app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
