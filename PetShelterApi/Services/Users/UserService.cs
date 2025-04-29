@@ -28,15 +28,6 @@ namespace PetShelterApi.Services.Users
         {
             var user = _mapper.Map<User>(createDto);
             await _repository.AddAsync(user);
-            //try
-            //{
-            //    await _repository.SaveChangesAsync();
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    Console.WriteLine($"Error saving changes: {ex.Message}");
-            //}
             
             return _mapper.Map<UserRegisterDto>(user);
         }
