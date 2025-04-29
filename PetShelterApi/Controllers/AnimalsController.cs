@@ -2,6 +2,7 @@
 using PetShelterApi.Dtos;
 using PetShelterApi.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PetShelterApi.Controllers
 {
@@ -20,6 +21,7 @@ namespace PetShelterApi.Controllers
 
         // GET: api/animals
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAnimals()
         {
             try
@@ -38,6 +40,7 @@ namespace PetShelterApi.Controllers
 
         // GET: api/animals/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetAnimal(int id)
         {
             var animal = await _animalService.GetAnimalByIdAsync(id);

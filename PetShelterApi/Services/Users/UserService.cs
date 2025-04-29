@@ -1,20 +1,50 @@
-﻿using PetShelterApi.Models;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AutoMapper;
+using PetShelterApi.Dtos;
+using PetShelterApi.Models;
+using PetShelterApi.Repositories;
+using Microsoft.Extensions.Logging;
+using PetShelterApi.Repositories.UserRepository;
+using PetShelterApi.Dtos.userDto;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace PetShelterApi.Services.Users
 {
     public class UserService : IUserService
     {
-        private readonly List<User> _users = new();
-        public void AddUser(User user)
+        private readonly IUserRepository _repository;
+        private readonly IMapper _mapper;
+        private readonly ILogger<UserService> _logger;
+
+        public UserService(IUserRepository repository, IMapper mapper, ILogger<UserService> logger)
         {
-            _users.Add(user);
+            _repository = repository;
+            _mapper = mapper;
+            _logger = logger;
+        }
+        
+
+        public async Task<UserRegisterDto> AddUser(UserRegisterDto createDto)
+        {
+            var user = _mapper.Map<User>(createDto);
+            await _repository.AddAsync(user);
+            //try
+            //{
+            //    await _repository.SaveChangesAsync();
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    Console.WriteLine($"Error saving changes: {ex.Message}");
+            //}
+            
+            return _mapper.Map<UserRegisterDto>(user);
         }
 
-        public User? GetUserByUserName(string username)
+        public async Task<UserRegisterDto?> GetUserByUserName(string username)
         {
-            return _users.FirstOrDefault(u => u.Username == username);
+            var user = await _repository.GetByNameAsync(username);
+            return user == null ? null : _mapper.Map<UserRegisterDto>(user);
         }
     }
 }

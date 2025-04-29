@@ -1,10 +1,12 @@
-﻿using PetShelterApi.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using PetShelterApi.Dtos.userDto;
+using PetShelterApi.Models;
 
 namespace PetShelterApi.Services.Users
 {
     public interface IUserService
     {
-        void AddUser(User user);
-        User? GetUserByUserName(string username);
+        Task<UserRegisterDto> AddUser(UserRegisterDto createDto);
+        Task<UserRegisterDto?> GetUserByUserName(string username);
     }
 }
