@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShelterApi.Dtos;
 using PetShelterApi.Services;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 
 namespace PetShelterApi.Controllers

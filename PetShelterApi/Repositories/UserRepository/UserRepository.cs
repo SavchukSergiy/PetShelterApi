@@ -14,8 +14,7 @@ namespace PetShelterApi.Repositories.UserRepository
         }
         public async Task AddAsync(User user)
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync(); 
+            await _context.Users.AddAsync(user); 
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()

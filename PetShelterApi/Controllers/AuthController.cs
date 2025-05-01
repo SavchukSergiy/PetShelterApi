@@ -4,7 +4,6 @@ using PetShelterApi.Services.Auth;
 using PetShelterApi.Services.Users;
 using PetShelterApi.Dtos.userDto;
 using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace PetShelterApi.Controllers
 {
@@ -27,8 +26,7 @@ namespace PetShelterApi.Controllers
         public async Task<IActionResult> Register([FromBody] UserRegisterDto registerDto)
         {
             var createdUser = await _userService.AddUser(registerDto);
-            
-
+           
             return Ok("User registered successfully.");
         }
 
